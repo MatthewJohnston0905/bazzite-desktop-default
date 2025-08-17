@@ -12,6 +12,9 @@ image-version: 41 # latest is also supported if you want new updates ASAP
 # module configuration, executed in order
 # you can include multiple instances of the same module
 modules:
+  - type: script
+    scripts:
+      - disable-autologin.sh
   - type: files
     files:
       - source: system
@@ -23,11 +26,6 @@ modules:
     install:
       - micro
       - starship
-    remove:
-      # example: removing firefox (in favor of the flatpak)
-      # "firefox" is the main package, "firefox-langpacks" is a dependency
-      - firefox
-      - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 
   - type: default-flatpaks
     configurations:
@@ -41,14 +39,4 @@ modules:
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
 # Add our custom changes to disable autologin
-firstboot:
-  yafti: true
-  # This section runs commands on the image itself
-  system:
-    # Disable the services and remove the config files
-    - systemctl-disable: 
-      - bazzite-autologin.service
-    - remove-etc-files:
-      - sddm.conf.d/steamos.conf
-      # Below is optional: uncomment to remove the touch keyboard on the login screen
-      #- sddm.conf.d/virtualkbd.conf
+
