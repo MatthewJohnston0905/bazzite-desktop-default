@@ -6,7 +6,7 @@ name: bazzite-desktop-default
 description: This is my personal OS image.
 
 # the base image to build on top of (FROM) and the version tag to use
-base-image: ghcr.io/ublue-os/silverblue-main
+base-image: ghcr.io/ublue-os/bazzite-deck
 image-version: 41 # latest is also supported if you want new updates ASAP
 
 # module configuration, executed in order
@@ -40,4 +40,15 @@ modules:
       - scope: user # Also add Flathub user repo, but no user packages
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
-
+# Add our custom changes to disable autologin
+firstboot:
+  yafti: true
+  # This section runs commands on the image itself
+  system:
+    # Disable the services and remove the config files
+    - systemctl-disable: 
+      - bazzite-autologin.service
+    - remove-etc-files:
+      - sddm.conf.d/steamos.conf
+      # Below is optional: uncomment to remove the touch keyboard on the login screen
+      #- sddm.conf.d/virtualkbd.conf
