@@ -2,13 +2,9 @@
 
 set -oue pipefail
 
-# Forcefully remove the sddm config file for steamos, ignoring errors if it doesn't exist.
+# Forcefully remove the sddm config file for steamos.
 rm -f /etc/sddm.conf.d/steamos.conf
 
-# This is a workaround for running systemctl in a container.
-# We create a dummy file for the service so the disable command can succeed.
-mkdir -p /etc/systemd/system/multi-user.target.wants/
-touch /etc/systemd/system/multi-user.target.wants/bazzite-autologin.service
-
-# Disable the autologin service.
-systemctl disable bazzite-autologin.service
+# This is the new, more forceful command.
+# "mask" creates a link to /dev/null, making it impossible for the system to start the service.
+systemctl mask bazzite-autologin.service
